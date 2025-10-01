@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Maatschappelijke Ontwikkelingen: de Game!</title>
   <meta name="description" content="Interactieve game voor Sportkunde studenten: leer maatschappelijke ontwikkelingen via flashcards, memory, speed click en scenario challenge." />
+  <meta name="theme-color" content="#e6007e" />
   <style>
-    /* --- alle styles zoals eerder, geen externe dependencies --- */
     :root { --magenta:#e6007e; --black:#111; --white:#fff; --bg:#fff; --text:#111; --muted:#efefef; --card:#f7f7f9; --shadow:0 6px 20px rgba(0,0,0,.08); --radius:14px; --safe-top: env(safe-area-inset-top); --safe-bottom: env(safe-area-inset-bottom); }
     body.dark { --bg:#0f1115; --text:#e7e9ee; --muted:#1c2027; --card:#171a21; --shadow:0 6px 20px rgba(0,0,0,.45); }
     *{box-sizing:border-box}
     html, body{height:100%; -webkit-tap-highlight-color: rgba(0,0,0,0);} 
     body{margin:0; font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text)}
     .container{max-width:1100px; margin:0 auto; padding:16px}
+    /* Topmenu */
     .topbar{position:sticky; top:0; z-index:50; padding-top:var(--safe-top); backdrop-filter:saturate(180%) blur(8px); background:color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid color-mix(in oklab, var(--text) 10%, transparent)}
     .top-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px; font-size:1.1rem}
@@ -25,18 +26,25 @@
     .btn.active, .btn:hover{background:var(--magenta); color:var(--white)}
     .btn-primary{background:var(--magenta); color:var(--white)}
     .btn-ghost{border-color:transparent}
+
     h1{font-size:clamp(22px,3vw,32px); margin:14px 0}
     h2{font-size:clamp(18px,2.4vw,26px); margin:10px 0}
     .section{padding:18px 0 28px}
     .muted{color:color-mix(in oklab, var(--text) 65%, transparent)}
+
     .panel{background:var(--card); border:2px solid var(--black); border-radius:14px; box-shadow:var(--shadow); text-align:left; padding:18px}
     .panel h2{margin-top:0}
     .panel .btn{margin-top:8px; border-width:2px; border-radius:18px; padding:12px 16px;}
     body.dark .panel{border-color:var(--white)}
+
     .hidden{display:none}
+
+    /* Landingsgrid */
     .landing-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:stretch; }
     @media (max-width: 700px){ .container{ padding:12px; } .brand span.title{ font-size:1rem; } .menu .btn{ padding:8px 10px; border-radius:12px; } .landing-grid{ grid-template-columns: 1fr; } .panel .btn{ width:100%; } }
     @media (max-width: 420px){ .brand span.title{ font-size:0.95rem; } .btn{ padding:10px 12px; } }
+
+    /* Trainingsveld */
     .card{perspective:1000px; margin:14px auto; width:100%; max-width:620px; height:min(54vh, 360px); cursor:pointer}
     .flip{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .5s ease; border-radius:14px; box-shadow:var(--shadow)}
     .card.flipped .flip{transform:rotateY(180deg)}
@@ -44,6 +52,8 @@
     .front{background:var(--magenta); color:var(--white); font-size:22px; font-weight:900}
     .back{background:var(--black); color:var(--white); transform:rotateY(180deg); font-size:16px; line-height:1.5}
     .controls{display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap}
+
+    /* Memory Match */
     .board{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px}
     .mm-card{height:110px; position:relative; perspective:1000px; cursor:pointer}
     .mm-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .35s ease; border-radius:14px; box-shadow:var(--shadow)}
@@ -53,6 +63,8 @@
     .mm-term{transform:rotateY(180deg); background:var(--magenta); color:var(--white)}
     .mm-example{transform:rotateY(180deg); background:var(--black); color:var(--white); font-weight:600; font-size:13px}
     .scorebar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin:10px 0 16px; padding:10px; border-radius:14px; background:var(--card); box-shadow:var(--shadow)}
+
+    /* Speed Click */
     .question{font-size:clamp(16px,2.2vw,20px); font-weight:900; margin:10px 0}
     .options{display:grid; grid-template-columns:1fr; gap:10px}
     .opt{ text-align:left; padding:14px; border-radius:14px; border:2px solid var(--black); cursor:pointer; font-weight:800 }
@@ -62,18 +74,229 @@
     .opt.wrong{background:color-mix(in oklab, #ff0022 35%, var(--white)); color:var(--black)}
     .timer{height:10px; background:var(--muted); border-radius:99px; overflow:hidden; box-shadow:inset 0 0 0 2px color-mix(in oklab, var(--text) 11%, transparent)}
     .timer>.bar{height:100%; width:100%; background:var(--magenta); transform-origin:left; transition:width .2s linear}
+
+    /* Scenario Challenge */
     .scenario-box{background:var(--card); padding:16px; border-radius:14px; box-shadow:var(--shadow); margin-bottom:12px}
     .pill{display:inline-block; padding:4px 10px; border-radius:999px; background:var(--magenta); color:var(--white); font-size:12px; font-weight:900; letter-spacing:.3px}
     .feedback{margin-top:10px; background:var(--muted); padding:12px; border-radius:14px}
   </style>
 </head>
 <body>
-  <!-- inhoud blijft hetzelfde, maar nu volledig standalone voor GitHub Pages -->
-  <!-- ... alle HTML en script uit de vorige versie ... -->
+  <header class="topbar">
+    <div class="container top-inner">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="title">Maatschappelijke Ontwikkelingen: de Game!</span>
+      </div>
+      <nav class="menu" aria-label="Hoofdmenu">
+        <button id="mClub" class="btn active">Het Clubhuis</button>
+        <button id="mTrain" class="btn">Trainingsveld</button>
+        <button id="mW1" class="btn">Wedstrijd 1</button>
+        <button id="mW2" class="btn">Wedstrijd 2</button>
+        <button id="mW3" class="btn">Wedstrijd 3</button>
+        <button id="themeToggle" class="btn btn-ghost" title="Donker/Licht">🌗</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Landingspagina Het Clubhuis -->
+    <section id="clubhuis" class="section">
+      <div class="landing-grid">
+        <div class="panel">
+          <h2>Het Trainingsveld</h2>
+          <p class="muted">Klik op de kaart om de toelichting en het sportvoorbeeld te zien en begin hier met leren!</p>
+          <button class="btn btn-primary" id="goTrain">Naar het Trainingsveld</button>
+        </div>
+        <div class="panel">
+          <h2>Wedstrijden</h2>
+          <div style="display:grid; gap:12px; max-width:520px;">
+            <button class="btn" id="goW1">Wedstrijd 1 – Memory Match</button>
+            <button class="btn" id="goW2">Wedstrijd 2 – Speed Click</button>
+            <button class="btn" id="goW3">Wedstrijd 3 – Scenario Challenge</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRAININGSVELD -->
+    <section id="train" class="section hidden">
+      <h2>Trainingsveld</h2>
+      <p class="muted">Klik op de kaart om de toelichting en het sportvoorbeeld te zien en begin hier met leren!</p>
+      <div id="trainCard" class="card" aria-live="polite">
+        <div class="flip">
+          <div id="trainFront" class="face front"></div>
+          <div id="trainBack" class="face back"></div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="prevBtn" class="btn">◀ Vorige</button>
+        <button id="shuffleBtn" class="btn">Schudden 🔀</button>
+        <button id="nextBtn" class="btn btn-primary">Volgende ▶</button>
+      </div>
+      <div class="muted" id="trainCounter" style="margin-top:6px"></div>
+    </section>
+
+    <!-- WEDSTRIJD 1: MEMORY MATCH -->
+    <section id="w1" class="section hidden">
+      <h2>Wedstrijd 1 – Memory Match</h2>
+      <div class="scorebar">
+        <div><strong>Beurten:</strong> <span id="w1Moves">0</span></div>
+        <div><strong>Gevonden paren:</strong> <span id="w1Pairs">0</span>/<span id="w1Total">0</span></div>
+        <div><button id="w1Restart" class="btn btn-primary">Opnieuw</button></div>
+      </div>
+      <div id="w1Board" class="board" aria-live="polite"></div>
+    </section>
+
+    <!-- WEDSTRIJD 2: SPEED CLICK -->
+    <section id="w2" class="section hidden">
+      <h2>Wedstrijd 2 – Speed Click</h2>
+      <div class="scorebar">
+        <div><strong>Score:</strong> <span id="w2Score">0</span></div>
+        <div><strong>Vraag:</strong> <span id="w2Index">0</span>/<span id="w2Total">10</span></div>
+        <div style="flex:1 1 auto"><div class="timer"><div id="w2Bar" class="bar"></div></div></div>
+        <div style="display:flex; gap:8px">
+          <button id="w2Start" class="btn btn-primary">Start ronde</button>
+          <button id="w2Next" class="btn" disabled>Volgende ▶</button>
+        </div>
+      </div>
+      <div id="w2Question" class="question"></div>
+      <div id="w2Options" class="options"></div>
+      <div id="w2Feedback" class="feedback hidden"></div>
+    </section>
+
+    <!-- WEDSTRIJD 3: SCENARIO CHALLENGE -->
+    <section id="w3" class="section hidden">
+      <h2>Wedstrijd 3 – Scenario Challenge</h2>
+      <div class="scorebar">
+        <div><strong>Score:</strong> <span id="w3Score">0</span></div>
+        <div><strong>Scenario:</strong> <span id="w3Index">0</span>/<span id="w3Total">10</span></div>
+        <div style="display:flex; gap:8px">
+          <button id="w3Start" class="btn btn-primary">Start ronde</button>
+          <button id="w3Next" class="btn" disabled>Volgende ▶</button>
+        </div>
+      </div>
+      <div class="scenario-box"><div class="pill">Casus</div><div id="w3Scenario" style="margin-top:8px; font-weight:900"></div></div>
+      <div id="w3Options" class="options"></div>
+      <div id="w3Feedback" class="feedback hidden"></div>
+    </section>
+  </main>
+
   <script>
-    // Plaats hier de volledige JS zoals in de vorige versie.
-    // Belangrijk: gebruik geen console.asserts voor productie.
-    // In GitHub Pages draait dit perfect standalone.
+    // ========= Data =========
+    const developments = [
+      { term:"Mondialisering", desc:"Mensen en landen worden wereldwijd sterker met elkaar verbonden; grenzen vervagen in uitwisseling.", example:"Wereldwijde uitzendingen van WK’s en Olympische Spelen." },
+      { term:"Vervlakking", desc:"Toename van oppervlakkig en snel entertainment; mensen haken sneller af en zappen meer.", example:"Kijkers zappen tijdens saaie fases van een wedstrijd." },
+      { term:"Vergrijzing", desc:"Het aandeel ouderen stijgt; gemiddeld worden mensen ouder (dubbele vergrijzing).", example:"Meer vraag naar 55+ beweegprogramma’s bij verenigingen." },
+      { term:"Multiculturalisme", desc:"Gelijkwaardige benadering van diverse culturen; samenleven met verschillende normen/waarden.", example:"Club past faciliteiten en tijden aan om drempels te verlagen." },
+      { term:"Informatisering", desc:"Grootschalig gebruik van digitale systemen en informatie; kennis verspreidt sneller.", example:"Apps, wearables en online data-analyse voor training en herstel." },
+      { term:"Festivalisering", desc:"Feest- en festivalcultuur rond (sport)events.", example:"TeamNL Olympic Festival als beleving rond de Spelen." },
+      { term:"Consumentisme", desc:"Vraag stuurt aanbod; consumentenorganisaties en klantwensen bepalen service.", example:"Fitnessclubs met ruime openingstijden op basis van ledenwensen." },
+      { term:"Autonomie", desc:"Zelf keuzes maken over wat waardevol is; zelfbeschikking i.p.v. heteronomie.", example:"Deelnemers kiezen eigen activiteit of nemen begeleidersrol." },
+      { term:"Vluchtigheid", desc:"Hypes zijn vergankelijk; populariteit kan snel dalen.", example:"Hypesport piekt kort en zakt daarna weg." },
+      { term:"Emancipatie", desc:"Wegvallen van beperkende bepalingen; gelijke rechten en kansen.", example:"Actief beleid op gender- en LHBTI+-inclusie in sport." },
+      { term:"Cocooning", desc:"Geborgenheid in eigen woonomgeving; thuis als veilige basis.", example:"Thuisworkouts en online lesplatforms." },
+      { term:"Privatisering", desc:"Publieke diensten gaan naar private exploitatie/eigendom.", example:"Vereniging privatiseert velden en plant zelf gebruik." },
+      { term:"Ontsporting", desc:"Minder nadruk op presteren/records; meer op plezier en ervaring.", example:"Funruns en recreatieve evenementen." }
+    ];
+
+    // ========= Dark/Light =========
+    const themeBtn = document.getElementById('themeToggle');
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // ========= Router / Menu =========
+    const sections = { clubhuis: document.getElementById('clubhuis'), train: document.getElementById('train'), w1: document.getElementById('w1'), w2: document.getElementById('w2'), w3: document.getElementById('w3') };
+    const menuBtns = { mClub: document.getElementById('mClub'), mTrain: document.getElementById('mTrain'), mW1: document.getElementById('mW1'), mW2: document.getElementById('mW2'), mW3: document.getElementById('mW3') };
+    const keyToBtn = { clubhuis: menuBtns.mClub, train: menuBtns.mTrain, w1: menuBtns.mW1, w2: menuBtns.mW2, w3: menuBtns.mW3 };
+
+    function show(key){
+      Object.values(sections).forEach(s=>s.classList.add('hidden'));
+      sections[key].classList.remove('hidden');
+      Object.values(menuBtns).forEach(b=>b.classList.remove('active'));
+      keyToBtn[key].classList.add('active');
+    }
+    function nav(key){ show(key); if(key==='train') renderTrainCard(); if(key==='w1') initW1(); if(key==='w2') initW2(); if(key==='w3') initW3(); }
+
+    // Top menu listeners
+    menuBtns.mClub.addEventListener('click', ()=>nav('clubhuis'));
+    menuBtns.mTrain.addEventListener('click', ()=>nav('train'));
+    menuBtns.mW1.addEventListener('click', ()=>nav('w1'));
+    menuBtns.mW2.addEventListener('click', ()=>nav('w2'));
+    menuBtns.mW3.addEventListener('click', ()=>nav('w3'));
+    // Landingsknoppen
+    document.getElementById('goTrain').addEventListener('click', ()=>nav('train'));
+    document.getElementById('goW1').addEventListener('click', ()=>nav('w1'));
+    document.getElementById('goW2').addEventListener('click', ()=>nav('w2'));
+    document.getElementById('goW3').addEventListener('click', ()=>nav('w3'));
+
+    // ========= Trainingsveld =========
+    let tIndex = 0; const tCard = document.getElementById('trainCard'); const tFront = document.getElementById('trainFront'); const tBack = document.getElementById('trainBack'); const tCounter = document.getElementById('trainCounter');
+    function updateCounter(){ tCounter.textContent = `${tIndex+1} / ${developments.length}`; }
+    function renderTrainCard(){ tCard.classList.remove('flipped'); const d = developments[tIndex]; tFront.textContent = d.term; tBack.innerHTML = `<div><strong>Toelichting:</strong> ${d.desc}</div><div style="margin-top:8px;"><strong>Sportvoorbeeld:</strong> ${d.example}</div>`; updateCounter(); }
+    tCard.addEventListener('click', ()=> tCard.classList.toggle('flipped'));
+    document.getElementById('nextBtn').addEventListener('click', ()=>{ tIndex = (tIndex+1)%developments.length; renderTrainCard(); });
+    document.getElementById('prevBtn').addEventListener('click', ()=>{ tIndex = (tIndex-1+developments.length)%developments.length; renderTrainCard(); });
+    document.getElementById('shuffleBtn').addEventListener('click', ()=>{ developments.sort(()=>Math.random()-.5); tIndex = 0; renderTrainCard(); });
+
+    // ========= Wedstrijd 1: Memory Match (alleen TOELICHTING) =========
+    const w1Board = document.getElementById('w1Board'); const w1MovesEl = document.getElementById('w1Moves'); const w1PairsEl = document.getElementById('w1Pairs'); const w1TotalEl = document.getElementById('w1Total'); const w1Restart = document.getElementById('w1Restart');
+    let w1State = { first:null, lock:false, moves:0, pairs:0 };
+    function buildW1Deck(){ const deck=[]; developments.forEach((d,key)=>{ deck.push({key, type:'term', text:d.term}); deck.push({key, type:'example', text:`Toelichting: ${d.desc}`}); }); return deck.sort(()=>Math.random()-.5); }
+    function renderW1(){ const deck = buildW1Deck(); w1Board.innerHTML=''; w1State={ first:null, lock:false, moves:0, pairs:0 }; w1MovesEl.textContent='0'; w1PairsEl.textContent='0'; w1TotalEl.textContent=String(developments.length); deck.forEach(card=>{ const el=document.createElement('div'); el.className='mm-card'; el.innerHTML=`<div class="mm-inner"><div class="mm-face mm-cover">?</div><div class="mm-face ${card.type==='term'?'mm-term':'mm-example'}">${card.text}</div></div>`; el.addEventListener('click', ()=>w1Flip(el,card)); w1Board.appendChild(el); }); }
+    function w1Flip(el,card){ if(w1State.lock || el.classList.contains('matched') || el.classList.contains('revealed')) return; el.classList.add('revealed'); if(!w1State.first){ w1State.first={el,card}; return; } w1State.moves++; w1MovesEl.textContent=String(w1State.moves); const prev=w1State.first; w1State.first=null; w1State.lock=true; const isMatch = prev.card.key===card.key && prev.card.type!==card.type; if(isMatch){ setTimeout(()=>{ prev.el.classList.add('matched'); el.classList.add('matched'); w1State.pairs++; w1PairsEl.textContent=String(w1State.pairs); w1State.lock=false; },220);} else { setTimeout(()=>{ prev.el.classList.remove('revealed'); el.classList.remove('revealed'); w1State.lock=false; },600);} }
+    function initW1(){ renderW1(); }
+    w1Restart.addEventListener('click', renderW1);
+
+    // ========= Wedstrijd 2: Speed Click (10 vragen, 20s) =========
+    const w2Total = 10, w2TimePerQ = 20; let w2Index=0, w2Score=0, w2Current=null, w2Timer=null, w2TimeLeft=w2TimePerQ;
+    const w2ScoreEl = document.getElementById('w2Score'); const w2IndexEl = document.getElementById('w2Index'); const w2TotalEl = document.getElementById('w2Total'); const w2QEl = document.getElementById('w2Question'); const w2OptsEl = document.getElementById('w2Options'); const w2Feedback = document.getElementById('w2Feedback'); const w2Bar = document.getElementById('w2Bar'); const w2Start = document.getElementById('w2Start'); const w2Next = document.getElementById('w2Next');
+    function initW2(){ w2Score=0; w2Index=0; w2TotalEl.textContent=String(w2Total); w2ScoreEl.textContent='0'; w2IndexEl.textContent='0'; w2QEl.textContent='Kies de juiste toelichting/sportvoorbeeld bij de getoonde ontwikkeling.'; w2OptsEl.innerHTML=''; w2Feedback.classList.add('hidden'); w2Start.disabled=false; w2Next.disabled=true; if(w2Timer){clearInterval(w2Timer); w2Timer=null;} w2Bar.style.width='100%'; }
+    function w2StartRound(){ w2Score=0; w2Index=0; w2Next.disabled=true; w2Start.disabled=true; w2NextQ(); }
+    const optionText = d => d.example; 
+    function w2NextQ(){ if(w2Index>=w2Total){ return w2End(); } w2Index++; w2IndexEl.textContent=String(w2Index); w2Feedback.classList.add('hidden'); const pool=[...developments]; const correct=pool.splice(Math.floor(Math.random()*pool.length),1)[0]; w2Current=correct; w2QEl.textContent=`Wat is het juiste sportvoorbeeld bij: ${correct.term}?`; const opts=[optionText(correct)]; while (opts.length < 4 && pool.length) { const pick = optionText(pool.splice(Math.floor(Math.random()*pool.length),1)[0]); if (pick && !opts.includes(pick)) opts.push(pick); } while (opts.length < 4) { opts.push('—'); } opts.sort(()=>Math.random()-.5); w2OptsEl.innerHTML=''; opts.forEach(text=>{ const btn=document.createElement('button'); btn.className='opt'; btn.textContent=text; btn.disabled = (text==='—'); btn.addEventListener('click',()=>w2Answer(btn, text===optionText(correct))); w2OptsEl.appendChild(btn); }); w2TimeLeft=w2TimePerQ; updateW2Bar(); if(w2Timer) clearInterval(w2Timer); w2Timer=setInterval(()=>{ w2TimeLeft-=0.2; if(w2TimeLeft<=0){ clearInterval(w2Timer); w2Timer=null; w2Reveal(false,'Tijd voorbij.'); } updateW2Bar(); },200); }
+    function updateW2Bar(){ const pct=Math.max(0, Math.min(1, w2TimeLeft/w2TimePerQ)); w2Bar.style.width=(pct*100)+'%'; }
+    function w2Answer(btn,correct){ if(w2Timer){ clearInterval(w2Timer); w2Timer=null; } [...w2OptsEl.children].forEach(b=>b.disabled=true); btn.classList.add(correct?'correct':'wrong'); w2Reveal(correct, correct?'Juist!':'Niet goed.'); }
+    function w2Reveal(correct,message){ if(correct) w2Score+=1; w2ScoreEl.textContent=String(w2Score); w2Feedback.innerHTML = `<strong>${message}</strong> Het juiste voorbeeld bij <em>${w2Current.term}</em>: ${optionText(w2Current)}.`; w2Feedback.classList.remove('hidden'); w2Next.disabled=false; }
+    function w2End(){ w2QEl.textContent=`Ronde klaar! Je score: ${w2Score}/${w2Total}.`; w2OptsEl.innerHTML=''; w2Feedback.classList.add('hidden'); w2Start.disabled=false; w2Next.disabled=true; if(w2Timer){ clearInterval(w2Timer); w2Timer=null; } w2Bar.style.width='100%'; }
+    w2Start.addEventListener('click', w2StartRound); w2Next.addEventListener('click', w2NextQ);
+
+    // ========= Wedstrijd 3: Scenario Challenge =========
+    const scenarios = [
+      { text:'Een vereniging merkt dat het aandeel 55+ leden groeit en wil het programma aanpassen.', answer:'Vergrijzing' },
+      { text:'Een mega-event trekt wereldwijd miljoenen kijkers en sponsors.', answer:'Mondialisering' },
+      { text:'Fans zappen weg als er weinig highlights zijn; de club wil de show rondom de wedstrijd vergroten.', answer:'Vervlakking' },
+      { text:'De club wil islamitische vrouwen beter laten meedoen en past faciliteiten/tijden aan.', answer:'Multiculturalisme' },
+      { text:'De sportschool breidt openingstijden uit op basis van ledenwensen.', answer:'Consumentisme' },
+      { text:'Thuisworkouts via video en apps worden de nieuwe standaard.', answer:'Cocooning' },
+      { text:'Het sportpark gaat in eigen beheer om zelf het gebruik te plannen.', answer:'Privatisering' },
+      { text:'De trainer laat deelnemers zelf kiezen wat en hoe ze trainen.', answer:'Autonomie' },
+      { text:'De club zet wearables en data in voor training en monitoring.', answer:'Informatisering' },
+      { text:'Deelnemers doen vooral mee voor plezier en beleving, niet voor records.', answer:'Ontsporting' },
+      { text:'Een hype-sport is extreem populair, maar zakt na een paar maanden in.', answer:'Vluchtigheid' },
+      { text:'De bond werkt aan gelijke kansen en inclusie voor vrouwen en LHBTI+.', answer:'Emancipatie' },
+      { text:'De club maakt van wedstrijddagen een festival met muziek en side-events.', answer:'Festivalisering' }
+    ];
+    const w3ScoreEl=document.getElementById('w3Score'); const w3IndexEl=document.getElementById('w3Index'); const w3TotalEl=document.getElementById('w3Total'); const w3ScenarioEl=document.getElementById('w3Scenario'); const w3OptsEl=document.getElementById('w3Options'); const w3Feedback=document.getElementById('w3Feedback'); const w3Start=document.getElementById('w3Start'); const w3Next=document.getElementById('w3Next');
+    let w3Index=0, w3Score=0, w3Current=null, w3Round=[];
+    function initW3(){ w3Score=0; w3Index=0; w3ScoreEl.textContent='0'; w3IndexEl.textContent='0'; w3TotalEl.textContent='10'; w3ScenarioEl.textContent='Kies de passende maatschappelijke ontwikkeling bij de casus.'; w3OptsEl.innerHTML=''; w3Feedback.classList.add('hidden'); w3Start.disabled=false; w3Next.disabled=true; }
+    function w3StartRound(){ w3Round = scenarios.sort(()=>Math.random()-.5).slice(0,10); w3Score=0; w3Index=0; w3Start.disabled=true; w3Next.disabled=true; w3NextScenario(); }
+    function w3NextScenario(){ if(w3Index>=w3Round.length) return w3End(); w3Current=w3Round[w3Index++]; w3IndexEl.textContent=String(w3Index); w3ScenarioEl.textContent=w3Current.text; w3Feedback.classList.add('hidden'); const opts = developments.map(d=>d.term).sort(()=>Math.random()-.5).slice(0,5); if(!opts.includes(w3Current.answer)){ opts[Math.floor(Math.random()*opts.length)] = w3Current.answer; } w3OptsEl.innerHTML=''; opts.forEach(term=>{ const btn=document.createElement('button'); btn.className='opt'; btn.textContent=term; btn.addEventListener('click',()=>w3Answer(btn, term===w3Current.answer)); w3OptsEl.appendChild(btn); }); }
+    function w3Answer(btn,correct){ [...w3OptsEl.children].forEach(b=>b.disabled=true); btn.classList.add(correct?'correct':'wrong'); if(correct) w3Score+=1; w3ScoreEl.textContent=String(w3Score); const d = developments.find(x=>x.term===w3Current.answer); w3Feedback.innerHTML = `<strong>${correct?'Juist!':'Niet goed.'}</strong> ${d.term}: ${d.desc}<br><em>Voorbeeld:</em> ${d.example}`; w3Feedback.classList.remove('hidden'); w3Next.disabled=false; }
+    function w3End(){ w3ScenarioEl.textContent=`Ronde klaar! Je score: ${w3Score}/${w3Round.length}.`; w3OptsEl.innerHTML=''; w3Feedback.classList.add('hidden'); w3Start.disabled=false; w3Next.disabled=true; }
+    w3Start.addEventListener('click', w3StartRound); w3Next.addEventListener('click', w3NextScenario);
+
+    // ========= Init =========
+    // Start in Het Clubhuis en initialiseer componenten éénmalig zodat alles direct werkt als je erheen navigeert.
+    nav('clubhuis');
+    // (Optioneel) Pre-render een eerste trainingskaart zodat schermwissel vloeiend voelt
+    renderTrainCard();
+    initW1();
+    initW2();
+    initW3();
   </script>
 </body>
 </html>
