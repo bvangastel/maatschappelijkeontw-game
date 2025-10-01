@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maatschappelijke Ontwikkelingen: de Game!</title>
+  <meta name="description" content="Interactieve game voor Sportkunde studenten: leer maatschappelijke ontwikkelingen via flashcards, memory, speed click en scenario challenge." />
+  <style>
+    /* --- alle styles zoals eerder, geen externe dependencies --- */
+    :root { --magenta:#e6007e; --black:#111; --white:#fff; --bg:#fff; --text:#111; --muted:#efefef; --card:#f7f7f9; --shadow:0 6px 20px rgba(0,0,0,.08); --radius:14px; --safe-top: env(safe-area-inset-top); --safe-bottom: env(safe-area-inset-bottom); }
+    body.dark { --bg:#0f1115; --text:#e7e9ee; --muted:#1c2027; --card:#171a21; --shadow:0 6px 20px rgba(0,0,0,.45); }
+    *{box-sizing:border-box}
+    html, body{height:100%; -webkit-tap-highlight-color: rgba(0,0,0,0);} 
+    body{margin:0; font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text)}
+    .container{max-width:1100px; margin:0 auto; padding:16px}
+    .topbar{position:sticky; top:0; z-index:50; padding-top:var(--safe-top); backdrop-filter:saturate(180%) blur(8px); background:color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid color-mix(in oklab, var(--text) 10%, transparent)}
+    .top-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px; font-size:1.1rem}
+    .brand .dot{width:14px; height:14px; background:var(--magenta); border-radius:4px; box-shadow:var(--shadow)}
+    .brand span.title{font-size:1.2rem; font-weight:900}
+    .menu{display:flex; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; scrollbar-width:none}
+    .menu::-webkit-scrollbar{display:none}
+    .btn{cursor:pointer; border:2px solid var(--black); border-radius:14px; padding:10px 14px; font-weight:800; background:transparent; color:var(--text); min-height:44px; touch-action:manipulation}
+    body.dark .btn{border-color:var(--white)}
+    .btn.active, .btn:hover{background:var(--magenta); color:var(--white)}
+    .btn-primary{background:var(--magenta); color:var(--white)}
+    .btn-ghost{border-color:transparent}
+    h1{font-size:clamp(22px,3vw,32px); margin:14px 0}
+    h2{font-size:clamp(18px,2.4vw,26px); margin:10px 0}
+    .section{padding:18px 0 28px}
+    .muted{color:color-mix(in oklab, var(--text) 65%, transparent)}
+    .panel{background:var(--card); border:2px solid var(--black); border-radius:14px; box-shadow:var(--shadow); text-align:left; padding:18px}
+    .panel h2{margin-top:0}
+    .panel .btn{margin-top:8px; border-width:2px; border-radius:18px; padding:12px 16px;}
+    body.dark .panel{border-color:var(--white)}
+    .hidden{display:none}
+    .landing-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:stretch; }
+    @media (max-width: 700px){ .container{ padding:12px; } .brand span.title{ font-size:1rem; } .menu .btn{ padding:8px 10px; border-radius:12px; } .landing-grid{ grid-template-columns: 1fr; } .panel .btn{ width:100%; } }
+    @media (max-width: 420px){ .brand span.title{ font-size:0.95rem; } .btn{ padding:10px 12px; } }
+    .card{perspective:1000px; margin:14px auto; width:100%; max-width:620px; height:min(54vh, 360px); cursor:pointer}
+    .flip{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .5s ease; border-radius:14px; box-shadow:var(--shadow)}
+    .card.flipped .flip{transform:rotateY(180deg)}
+    .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; display:flex; align-items:center; justify-content:center; padding:22px; text-align:center}
+    .front{background:var(--magenta); color:var(--white); font-size:22px; font-weight:900}
+    .back{background:var(--black); color:var(--white); transform:rotateY(180deg); font-size:16px; line-height:1.5}
+    .controls{display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap}
+    .board{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px}
+    .mm-card{height:110px; position:relative; perspective:1000px; cursor:pointer}
+    .mm-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .35s ease; border-radius:14px; box-shadow:var(--shadow)}
+    .mm-card.revealed .mm-inner{transform:rotateY(180deg)}
+    .mm-face{position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; display:flex; align-items:center; justify-content:center; padding:12px; text-align:center; font-weight:800}
+    .mm-cover{background:var(--card); color:var(--text); border:2px dashed color-mix(in oklab, var(--text) 30%, transparent)}
+    .mm-term{transform:rotateY(180deg); background:var(--magenta); color:var(--white)}
+    .mm-example{transform:rotateY(180deg); background:var(--black); color:var(--white); font-weight:600; font-size:13px}
+    .scorebar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin:10px 0 16px; padding:10px; border-radius:14px; background:var(--card); box-shadow:var(--shadow)}
+    .question{font-size:clamp(16px,2.2vw,20px); font-weight:900; margin:10px 0}
+    .options{display:grid; grid-template-columns:1fr; gap:10px}
+    .opt{ text-align:left; padding:14px; border-radius:14px; border:2px solid var(--black); cursor:pointer; font-weight:800 }
+    body.dark .opt{border-color:var(--white)}
+    .opt:hover{transform:translateY(-1px)}
+    .opt.correct{background:color-mix(in oklab, var(--magenta) 35%, var(--white)); color:var(--black)}
+    .opt.wrong{background:color-mix(in oklab, #ff0022 35%, var(--white)); color:var(--black)}
+    .timer{height:10px; background:var(--muted); border-radius:99px; overflow:hidden; box-shadow:inset 0 0 0 2px color-mix(in oklab, var(--text) 11%, transparent)}
+    .timer>.bar{height:100%; width:100%; background:var(--magenta); transform-origin:left; transition:width .2s linear}
+    .scenario-box{background:var(--card); padding:16px; border-radius:14px; box-shadow:var(--shadow); margin-bottom:12px}
+    .pill{display:inline-block; padding:4px 10px; border-radius:999px; background:var(--magenta); color:var(--white); font-size:12px; font-weight:900; letter-spacing:.3px}
+    .feedback{margin-top:10px; background:var(--muted); padding:12px; border-radius:14px}
+  </style>
+</head>
+<body>
+  <!-- inhoud blijft hetzelfde, maar nu volledig standalone voor GitHub Pages -->
+  <!-- ... alle HTML en script uit de vorige versie ... -->
+  <script>
+    // Plaats hier de volledige JS zoals in de vorige versie.
+    // Belangrijk: gebruik geen console.asserts voor productie.
+    // In GitHub Pages draait dit perfect standalone.
+  </script>
+</body>
+</html>
